@@ -3,6 +3,7 @@ import { FaBitcoin, FaEthereum } from "react-icons/fa";
 import { SiBinance } from "react-icons/si";
 import WalletConnectButton from "./components/WalletConnectButton";
 import BuyTokensForm from "./components/BuyTokensForm";
+import { getContractInfo } from "./contract";
 import "./App.css";
 import tokenomicsImage from "./tokenomics.webp";
 import whitepaperPdf from "./Solium_Whitepaper.pdf";
@@ -31,6 +32,15 @@ function App() {
     fetchInfo();
   }, [provider]);
 
+  useEffect(() => {
+    fetch("https://soliumcoin.com:8443/api/current-time")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Server Time:", data);
+        setServerTime(data.now || data);
+      })
+      .catch((err) => console.error(err));
+  }, []);
 
   const handleDisclaimerAccept = () => {
     setShowDisclaimer(false);
@@ -111,13 +121,13 @@ function App() {
           )}
         </section>
         <section className="wallet-section">
-        <h2>Wallet Connect</h2>
-        <WalletConnectButton setProvider={setProvider} setAccount={setAccount} />
-      </section>
-      <section className="buy-tokens-section">
-        <h2>Solium Buy</h2>
-        <BuyTokensForm provider={provider} account={account} />
-      </section>
+          <h2>Wallet Connect</h2>
+          <WalletConnectButton setProvider={setProvider} setAccount={setAccount} />
+        </section>
+        <section className="buy-tokens-section">
+          <h2>Solium Buy</h2>
+          <BuyTokensForm provider={provider} account={account} />
+        </section>
         <section className="contract-info-section">
           <h2>Presale Info</h2>
           <div className="info-card">
